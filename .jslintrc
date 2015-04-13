@@ -1,0 +1,9 @@
+{
+  "predef": [
+    "console",
+    "window"
+  ],
+  "browser": true,
+  "indent": 2,
+  "vars": true
+}
