@@ -4,9 +4,9 @@
 
 function App() {
   var self = this;
-  var headerView = new spa.View('header', '<a href="/">Home</a> <a href="/posts/1">Post 1</a>');
+  var headerView = new spa.View('header', '<a href="/">Home</a> <a href="/posts/1">Post 1</a> <a href="/posts/2">Post 2</a>');
   var homeView = new spa.View('main', '<h1>Welcome</h1>');
-  var postsView = new spa.View('main', '<h1>Posts</h1>');
+  var postsView = new spa.View('main', '<h1>Post {{id}}</h1>');
 
   self.router = new spa.Router();
 

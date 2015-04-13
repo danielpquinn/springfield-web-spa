@@ -1,3 +1,5 @@
+/*global Handlebars */
+
 'use strict';
 
 var spa = window.spa || {};
@@ -6,13 +8,13 @@ function View(el, template) {
   var self = this;
 
   self.el = document.getElementById(el);
-  self.template = template;
+  self.template = Handlebars.compile(template);
 
   self.render = function (data) {
     var i = 0;
     var links;
 
-    self.el.innerHTML = self.template;
+    self.el.innerHTML = self.template(data);
     links = self.el.querySelectorAll('a[href]');
     for (i; i < links.length; i += 1) {
       links[i].addEventListener('click', function (e) {
