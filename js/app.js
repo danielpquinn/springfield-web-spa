@@ -28,6 +28,4 @@ function App() {
   headerView.on('navigate', function (path) {
     self.router.navigate(path);
   });
-
-  console.log(self);
 }
