@@ -4,41 +4,59 @@ var spa = window.spa || {};
 
   'use strict';
 
+  // Model
+  // Used to model data and perform data related operations
+
   function Model() {}
+
+  // Model configuration, should be overriden in subclass
+
+  Model.prototype.config = {
+    baseUrl: '',
+    defaults: {}
+  };
+
+  // Initialize model. Override defaults with new properties
 
   Model.prototype.initialize = function (props) {
     var self = this;
-    var properties = props;
 
-    var sendRequest = function (method, url, cb) {
-      var req = new XMLHttpRequest();
-      req.open(method, url, cb);
-      req.send();
-    };
+    props = props || {};
 
-    self.baseUrl = '';
+    self._properties = {};
 
-    self.list = function (cb) {
-      sendRequest('GET', self.baseUrl, cb);
-    };
-
-    self.show = function (cb) {
-      sendRequest('GET', self.baseUrl + self.get('id'), cb);
-    };
-
-    self.set = function (key, value) {
-      props[key] = value;
-      self.trigger('set', { key: key, value: value });
-    };
-
-    self.get = function (key) {
-      return properties[key];
-    };
+    Object.keys(this.config.defaults).forEach(function (key) {
+      self._properties[key] = props[key] || self.config.defaults[key];
+    });
   };
 
-  Object.keys(spa.Event).forEach(function (key) {
-    Model.prototype[key] = spa.Event[key];
-  });
+  // Get a property
+
+  Model.prototype.get = function (key) {
+    return this._properties[key];
+  };
+
+  // Set a property
+
+  Model.prototype.set = function (key, property) {
+    this._properties[key] = property;
+    this.trigger('set', { key: key, property: property });
+    return this;
+  };
+
+  // Plain object representation of model
+
+  Model.prototype.toObject = function () {
+    return this._properties;
+  };
+
+  // Mix in spa.Events
+
+  for (var key in spa.event) {
+    Model.prototype[key] = spa.event[key];
+  }
+
+  // Export
 
   spa.Model = Model;
 

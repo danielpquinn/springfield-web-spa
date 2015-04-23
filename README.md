@@ -1,9 +1,9 @@
 # Springfield Web
 ## Intro to Single-Page Web Applications
 
-__Date__ Thursday, May 14, 2015  
+__Date__ Thursday, May 21, 2015  
 __Time__ 7:00 - 8:00 PM (maybe longer?)  
-__Location__ TBA  
+__Location__ [Levi, Ray & Shoup](https://www.google.com/maps/place/2401+W+Monroe+St,+Springfield,+IL+62704/@39.7925245,-89.6993366,17z/data=!3m1!4b1!4m2!3m1!1s0x88753875a25e68c3:0x888c1f37723ae76)  
 
 Code samples are available at http://github.com/danielpquinn/springfield-web-spa
 

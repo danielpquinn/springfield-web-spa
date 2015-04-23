@@ -6,30 +6,44 @@ var spa = window.spa || {};
 
   /*global Handlebars */
 
-  function View(el, template) {
+  // View
+  // Renders html and overrides default link behavior
+
+  function View() {}
+
+  // Initialize view
+
+  View.prototype.initialize = function (el, template) {
+    this.el = document.getElementById(el);
+    this.template = Handlebars.compile(template);
+  };
+
+  // Render template using handlebars and supplied view data
+
+  View.prototype.render = function (data) {
     var self = this;
+    var i = 0;
+    var links;
 
-    self.el = document.getElementById(el);
-    self.template = Handlebars.compile(template);
-
-    self.render = function (data) {
-      var i = 0;
-      var links;
-
-      self.el.innerHTML = self.template(data);
-      links = self.el.querySelectorAll('a[href]');
-      for (i; i < links.length; i += 1) {
-        links[i].addEventListener('click', function (e) {
-          e.preventDefault();
-          self.trigger('navigate', [e.target.attributes.href.value]);
-        });
-      }
+    var handleClick = function (e) {
+      e.preventDefault();
+      self.trigger('navigate', [e.target.attributes.href.value]);
     };
+
+    self.el.innerHTML = self.template(data);
+    links = self.el.querySelectorAll('a[href]');
+    for (i; i < links.length; i += 1) {
+      links[i].addEventListener('click', handleClick);
+    }
+  };
+
+  // Mixin events
+
+  for (var key in spa.event) {
+    View.prototype[key] = spa.event[key];
   }
 
-  Object.keys(spa.Event).forEach(function (key) {
-    View.prototype[key] = spa.Event[key];
-  });
+  // Export
 
   spa.View = View;
 
