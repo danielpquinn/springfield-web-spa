@@ -1,0 +1,32 @@
+{
+  "name": "springfield-web-spa",
+  "version": "1.0.0",
+  "description": "Examples related to Springfield Web Meetup Group: Intro to SPAs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielpquinn/springfield-web-spa.git"
+  },
+  "keywords": [
+    "SPA",
+    "Example",
+    "ES6"
+  ],
+  "author": "Daniel Quinn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielpquinn/springfield-web-spa/issues"
+  },
+  "homepage": "https://github.com/danielpquinn/springfield-web-spa",
+  "devDependencies": {
+    "babel": "^5.1.11",
+    "babelify": "^6.0.2",
+    "browserify": "^9.0.8",
+    "gulp": "^3.8.11",
+    "handlebars": "^3.0.2",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
