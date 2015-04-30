@@ -2,6 +2,7 @@
 // Main application
 
 import * as spa from './spa/index'
+import XHR from './spa/lib/xhr'
 
 class App {
 
@@ -9,7 +10,7 @@ class App {
 
     // Header view
 
-    var headerView = new spa.View('header', '<a href="/">Home</a> <a href="/slides/1">Slide 1</a> <a href="/slides/2">Slide 2</a>')
+    var headerView = new spa.View('header', '<a href="/">Home</a> {{#each slides}}<a href="/slides/{{this.id}}" title="{{this.title}}">{{this.title}}</a> {{/each}}')
 
     // Home view
 
@@ -22,12 +23,21 @@ class App {
     // Slide model
 
     class Slide extends spa.Model {}
-    Slide.prototype.config = {
-      baseUrl: 'http://localhost:8000/api/slides',
+    Slide.config = {
+      baseUrl: 'http://localhost:8000/json/slides',
       defaults: {
+        id: 0,
         title: 'Slide Title',
         body: 'Slide body.'
       }
+    }
+
+    // Override list function for demo purposes
+
+    Slide.list = function () {
+      return new XHR().get('http://localhost:8000/json/slides.json')
+        .then(response => { return JSON.parse(response) })
+        .catch(console.log)
     }
 
     // Application router
@@ -37,7 +47,6 @@ class App {
     // Home controller
 
     function homeController(params) {
-      headerView.render()
       homeView.render(params)
     }
 
@@ -45,12 +54,13 @@ class App {
 
     function slideController(params) {
       var slide = new Slide({
-        title: `Slide ${params.id}`,
-        body: `Slide ${params.id} body.`
+        id: `${params.id}.json`
       })
 
-      headerView.render()
-      slideView.render(slide.toObject())
+      slide.fetch().then(() => {
+        slideView.render(slide.toObject())
+      })
+      .catch(console.log)
     }
 
     // Route definitions
@@ -58,15 +68,22 @@ class App {
     router.addRoute('/slides/:id', slideController)
     router.addRoute('/', homeController)
 
+    // Fetch nav and render header
+    
+    Slide.list().then(slides => {
+      headerView.render({ slides })
+    })
+
     // Initial navigation
 
     router.navigate(window.location.pathname)
 
     // Events
 
-    headerView.on('navigate', (path) => {
+    headerView.on('navigate', path => {
       router.navigate(path)
     })
+
   }
 }
 

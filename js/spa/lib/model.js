@@ -3,6 +3,9 @@
 // Used to model data and perform data related operations
 
 import events from './events'
+import XHR from './xhr'
+
+var properties = Symbol('properties')
 
 export default class Model {
 
@@ -10,20 +13,37 @@ export default class Model {
 
   constructor(props) {
     props = props || {}
+    this[properties] = Object.assign(this.constructor.config.defaults, props)
+  }
 
-    this._properties = Object.assign(this.config.defaults, props)
+  // List this model
+
+  static list() {
+    return new XHR().get(`${this.config.baseUrl}`)
+      .then(response => { return JSON.parse(response) })
+      .catch(console.log)
+  }
+
+  // Fetch this model by id
+
+  fetch() {
+    return new XHR().get(`${this.constructor.config.baseUrl}/${this.get('id')}`)
+      .then(response => {
+        Object.assign(this[properties], JSON.parse(response))
+        return this
+      })
   }
 
   // Get a property
 
   get(key) {
-    return this._properties[key]
+    return this[properties][key]
   }
 
   // Set a property
 
   set(key, property) {
-    this._properties[key] = property
+    this[properties][key] = property
     this.trigger('set', { key, property })
     return this
   }
@@ -31,16 +51,13 @@ export default class Model {
   // Plain object representation of model
 
   toObject() {
-    return this._properties
+    return this[properties]
   }
 }
 
 // Model configuration, should be overriden in subclass
 
-Model.prototype.config = {
-  baseUrl: '',
-  defaults: {}
-}
+Model.config = { baseUrl: '', defaults: {} }
 
 // Mix in spa.events
 

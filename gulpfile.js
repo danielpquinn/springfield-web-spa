@@ -14,3 +14,7 @@ gulp.task('babelify', function () {
     .pipe(source('output.js'))
     .pipe(gulp.dest('./dist'));
 });
+
+gulp.task('watch', function () {
+  gulp.watch(['js/**/*.js'], ['babelify']);
+});
