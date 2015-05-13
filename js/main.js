@@ -2,7 +2,6 @@
 // Main application
 
 import * as spa from './spa/index'
-import XHR from './spa/lib/xhr'
 
 class App {
 
@@ -10,34 +9,30 @@ class App {
 
     // Header view
 
-    var headerView = new spa.View('header', '<a href="/">Home</a> {{#each slides}}<a href="/slides/{{this.id}}" title="{{this.title}}">{{this.title}}</a> {{/each}}')
+    var headerView = new spa.View('header', '<h1><a href="/">Single Page App Demo</a></h1>')
 
     // Home view
 
-    var homeView = new spa.View('main', '<h1>Welcome</h1>')
+    var homeView = new spa.View('main', '<a href="/posts">View posts</a>')
 
-    // Slide view
+    // Posts view
 
-    var slideView = new spa.View('main', '<h1>{{title}}</h1><p>{{body}}</p>')
+    var postsView = new spa.View('main', '<ul>{{#each posts}}<li><a href="/posts/{{this.id}}" title="{{this.title}}">{{this.title}}</a></li>{{/each}}</ul>')
 
-    // Slide model
+    // Post detail view
 
-    class Slide extends spa.Model {}
-    Slide.config = {
-      baseUrl: 'http://localhost:8000/json/slides',
+    var postView = new spa.View('main', '<h1>{{title}}</h1><p>{{body}}</p>')
+
+    // Post model
+
+    class Post extends spa.Model {}
+    Post.config = {
+      baseUrl: 'http://localhost:3000/api/posts',
       defaults: {
         id: 0,
-        title: 'Slide Title',
-        body: 'Slide body.'
+        title: 'Post Title',
+        body: 'Post body.'
       }
-    }
-
-    // Override list function for demo purposes
-
-    Slide.list = function () {
-      return new XHR().get('http://localhost:8000/json/slides.json')
-        .then(response => { return JSON.parse(response) })
-        .catch(console.log)
     }
 
     // Application router
@@ -47,32 +42,39 @@ class App {
     // Home controller
 
     function homeController(params) {
+      headerView.render()
       homeView.render(params)
     }
 
-    // Slide controller
+    // Posts controller
 
-    function slideController(params) {
-      var slide = new Slide({
-        id: `${params.id}.json`
+    function postsController(params) {
+      headerView.render()
+      Post.list().then(posts => {
+        postsView.render({ posts })
+      })
+      .catch(console.log)
+    }
+
+    // Post controller
+
+    function postController(params) {
+      var post = new Post({
+        id: `${params.id}`
       })
 
-      slide.fetch().then(() => {
-        slideView.render(slide.toObject())
+      post.fetch().then(() => {
+        headerView.render()
+        postView.render(post.toObject())
       })
       .catch(console.log)
     }
 
     // Route definitions
 
-    router.addRoute('/slides/:id', slideController)
+    router.addRoute('/posts/:id', postController)
+    router.addRoute('/posts', postsController)
     router.addRoute('/', homeController)
-
-    // Fetch nav and render header
-    
-    Slide.list().then(slides => {
-      headerView.render({ slides })
-    })
 
     // Initial navigation
 
@@ -89,6 +91,6 @@ class App {
 
 // Initialization
 
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', e => {
   var app = new App()
 })

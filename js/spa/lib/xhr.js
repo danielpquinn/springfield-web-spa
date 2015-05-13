@@ -10,7 +10,7 @@ export default class XHR {
 
   sendRequest(method = 'get', url) {
     return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest()
 
       xhr.addEventListener('load', () => {
         resolve(xhr.response)
