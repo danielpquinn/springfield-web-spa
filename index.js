@@ -4,7 +4,7 @@
 
 var Hapi = require('hapi');
 
-// Declarations
+// Definitions
 
 var posts = [];
 
