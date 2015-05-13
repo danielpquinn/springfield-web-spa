@@ -9,19 +9,24 @@ class App {
 
     // Header view
 
-    var headerView = new spa.View('header', '<h1><a href="/">Single Page App Demo</a></h1>')
+    var headerView = new spa.View('header', () => { return '<h1><a href="/">Single Page App Demo</a></h1>' })
 
     // Home view
 
-    var homeView = new spa.View('main', '<p>Welcome</p>')
+    var homeView = new spa.View('main', () => { return '<p>Welcome</p>' })
 
     // Posts view
 
-    var postsView = new spa.View('sidebar', '<nav><ul>{{#each posts}}<li><a href="/posts/{{this.id}}" title="{{this.title}}">{{this.title}}</a></li>{{/each}}</ul></nav>')
+    var postsView = new spa.View('sidebar', data => {
+      var template = '<ul>'
+      data.forEach(item => { template += `<li><a href="/posts/${item.id}" title="${item.title}">${item.title}</a></li>` })
+      template += '</ul>'
+      return template
+    })
 
     // Post detail view
 
-    var postView = new spa.View('main', '<h1>{{title}}</h1><p>{{body}}</p>')
+    var postView = new spa.View('main', data => { return `<h1>${data.title}</h1><p>${data.body}</p>` })
 
     // Post model
 
@@ -71,7 +76,7 @@ class App {
 
     Post.list().then(posts => {
       headerView.render()
-      postsView.render({ posts })
+      postsView.render(posts)
     })
 
     // Events
