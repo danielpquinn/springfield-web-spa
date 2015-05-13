@@ -6,7 +6,6 @@ var Hapi = require('hapi');
 
 // Declarations
 
-var addDummyPost;
 var posts = [];
 
 // Create server
@@ -26,25 +25,22 @@ server.route({
 
 // Dummy post route
 
-addDummyPost = function (index) {
-  server.route({
-    method: 'GET',
-    path: '/api/posts/' + index,
-    handler: function (request, reply) {
-      reply({
-        'id': index,
-        'title': 'Post ' + index + ' Title',
-        'body': 'Post ' + index + ' content.'
-      });
-    }
-  });
-};
+server.route({
+  method: 'GET',
+  path: '/api/posts/{id}',
+  handler: function (request, reply) {
+    reply({
+      'id': request.params.id,
+      'title': 'Post ' + request.params.id + ' Title',
+      'body': 'Post ' + request.params.id + ' content.'
+    });
+  }
+});
 
 // Add dummy posts
 
 for (var i = 0; i < 10; i += 1) {
   posts.push({ id: i, title: 'Post ' + i + ' Title'});
-  addDummyPost(i);
 }
 
 // Start server

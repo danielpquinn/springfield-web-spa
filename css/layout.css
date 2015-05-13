@@ -1,0 +1,20 @@
+
+/* Layout */
+
+header, aside, section {
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+aside {
+  float: left;
+  width: 250px;
+}
+
+section {
+  margin-left: 270px;
+}

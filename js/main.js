@@ -13,11 +13,11 @@ class App {
 
     // Home view
 
-    var homeView = new spa.View('main', '<a href="/posts">View posts</a>')
+    var homeView = new spa.View('main', '<p>Welcome</p>')
 
     // Posts view
 
-    var postsView = new spa.View('main', '<ul>{{#each posts}}<li><a href="/posts/{{this.id}}" title="{{this.title}}">{{this.title}}</a></li>{{/each}}</ul>')
+    var postsView = new spa.View('sidebar', '<nav><ul>{{#each posts}}<li><a href="/posts/{{this.id}}" title="{{this.title}}">{{this.title}}</a></li>{{/each}}</ul></nav>')
 
     // Post detail view
 
@@ -42,18 +42,7 @@ class App {
     // Home controller
 
     function homeController(params) {
-      headerView.render()
       homeView.render(params)
-    }
-
-    // Posts controller
-
-    function postsController(params) {
-      headerView.render()
-      Post.list().then(posts => {
-        postsView.render({ posts })
-      })
-      .catch(console.log)
     }
 
     // Post controller
@@ -64,7 +53,6 @@ class App {
       })
 
       post.fetch().then(() => {
-        headerView.render()
         postView.render(post.toObject())
       })
       .catch(console.log)
@@ -73,12 +61,18 @@ class App {
     // Route definitions
 
     router.addRoute('/posts/:id', postController)
-    router.addRoute('/posts', postsController)
     router.addRoute('/', homeController)
 
     // Initial navigation
 
     router.navigate(window.location.pathname)
+
+    // Initial render
+
+    Post.list().then(posts => {
+      headerView.render()
+      postsView.render({ posts })
+    })
 
     // Events
 
