@@ -9,15 +9,18 @@ class App {
 
     // Header view
 
-    var headerView = new spa.View('header', () => { return '<h1><a href="/">Single Page App Demo</a></h1>' })
+    class HeaderView extends spa.View {}
+    var headerView = new HeaderView('header', () => { return '<h1><a href="/">Single Page App Demo</a></h1>' })
 
     // Home view
 
-    var homeView = new spa.View('main', () => { return '<p>Welcome</p>' })
+    class HomeView extends spa.View {}
+    var homeView = new HomeView('main', () => { return '<p>Welcome</p>' })
 
     // Posts view
 
-    var postsView = new spa.View('sidebar', data => {
+    class PostsView extends spa.View {}
+    var postsView = new PostsView('sidebar', data => {
       var template = '<ul>'
       data.forEach(item => { template += `<li><a href="/posts/${item.id}" title="${item.title}">${item.title}</a></li>` })
       template += '</ul>'
@@ -26,7 +29,8 @@ class App {
 
     // Post detail view
 
-    var postView = new spa.View('main', data => { return `<h1>${data.title}</h1><p>${data.body}</p>` })
+    class PostView extends spa.View {}
+    var postView = new PostView('main', data => { return `<h1>${data.title}</h1><p>${data.body}</p>` })
 
     // Post model
 
