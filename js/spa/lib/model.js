@@ -11,8 +11,7 @@ export default class Model {
 
   // Initialize model. Override defaults with new properties
 
-  constructor(props) {
-    props = props || {}
+  constructor(props = {}) {
     this[properties] = Object.assign(this.constructor.config.defaults, props)
   }
 
