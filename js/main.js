@@ -50,15 +50,15 @@ class App {
 
     // Home controller
 
-    function homeController(params) {
-      homeView.render(params)
+    function homeController() {
+      homeView.render()
     }
 
     // Post controller
 
     function postController(params) {
       var post = new Post({
-        id: `${params.id}`
+        id: params.id
       })
 
       post.fetch().then(() => {
