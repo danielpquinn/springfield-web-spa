@@ -1,6 +1,6 @@
 
 // Router
-// Used to store route definitions, parse paths and execute controllers
+// Used to store route definitions, parse paths and execute handlers
 
 export default class Router {
 
